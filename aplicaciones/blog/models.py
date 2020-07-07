@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -31,3 +32,21 @@ class Autor(models.Model):
     
     def __str__(self):
         return "{0},{1}".format(self.apellidos, self.nombres)
+
+class Post(models.Model):
+    titulo = models.CharField('Título', max_length=90, blank=True, null=True)
+    slug = models.CharField('Slug', max_length=100, blank=True, null=True)
+    descripcion = models.CharField('Descripción', max_length=110, blank=True, null=True)
+    contenido = RichTextField()
+    imagen = models.URLField(max_length=255, blank=True, null=True)
+    autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    estado = models.BooleanField('Publicado/no publicado', default= True)
+    fecha_creacion = models.DateField('Fecha de creacion', auto_now=False, auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Post'
+        verbose_name_plural = 'Posts'
+
+    def __str__(self):
+        return self.titulo
