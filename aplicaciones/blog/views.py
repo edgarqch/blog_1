@@ -7,6 +7,16 @@ def home(request):
     posts = Post.objects.filter(estado = True)
     return render(request, 'index.html', {'posts':posts})
 
+def detallePost(request,slug):
+    post = Post.objects.get(
+        slug = slug
+    )
+    contenido = post.contenido
+    contenido = contenido.replace('&nbsp;', ' ')
+    contenido = contenido.replace('<img ', '<img class="img-fluid" ')
+
+    return render(request, 'post.html', {'detalle_post':post, 'contenido':contenido})
+
 def generales(request):
     posts = Post.objects.filter(
         estado = True,
