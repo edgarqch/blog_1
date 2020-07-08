@@ -11,14 +11,12 @@
   <p>{{ detalle_post.descripcion }}</p>
 {% endblock titulo_principal %}
 
+{% block barra_busqueda %}
+
+{% endblock barra_busqueda %}
+
 {% block contenido %}
-  <article>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
+
           {{ contenido | safe }}
-        </div>
-      </div>
-    </div>
-  </article>
+
 {% endblock contenido %}

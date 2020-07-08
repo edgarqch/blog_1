@@ -1,16 +1,28 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from django.core.paginator import Paginator
+
 from .models import Post, Categoria
 
 # Create your views here.
 
 def home(request):
+    queryset = request.GET.get("buscar")
     posts = Post.objects.filter(estado = True)
+    if queryset:
+        posts = Post.objects.filter(
+            Q(titulo__icontains = queryset) |
+            Q(descripcion__icontains = queryset)
+        ).distinct()
+
+    paginator = Paginator(posts, 2)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
     return render(request, 'index.html', {'posts':posts})
 
 def detallePost(request,slug):
-    post = Post.objects.get(
-        slug = slug
-    )
+    post = get_object_or_404(Post,slug=slug)
     contenido = post.contenido
     contenido = contenido.replace('&nbsp;', ' ')
     contenido = contenido.replace('<img ', '<img class="img-fluid" ')
@@ -18,36 +30,96 @@ def detallePost(request,slug):
     return render(request, 'post.html', {'detalle_post':post, 'contenido':contenido})
 
 def generales(request):
+    queryset = request.GET.get("buscar")
     posts = Post.objects.filter(
         estado = True,
-        categoria = Categoria.objects.get(nombre='General')
+        categoria = Categoria.objects.get(nombre__iexact='General')
     )
+    if queryset:
+        posts = Post.objects.filter(
+            Q(titulo__icontains = queryset) |
+            Q(descripcion__icontains = queryset),
+            estado = True,
+            categoria = Categoria.objects.get(nombre__iexact='General')
+        ).distinct()
+                
+    paginator = Paginator(posts, 2)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
     return render(request, 'generales.html', {'posts':posts})
 
 def programacion(request):
+    queryset = request.GET.get("buscar")
     posts = Post.objects.filter(
         estado = True,
-        categoria = Categoria.objects.get(nombre='Programacion')
+        categoria = Categoria.objects.get(nombre__iexact='Programacion')
     )
+    if queryset:
+        posts = Post.objects.filter(
+            Q(titulo__icontains = queryset) |
+            Q(descripcion__icontains = queryset),
+            estado = True,
+            categoria = Categoria.objects.get(nombre__iexact='Programacion')
+        ).distinct()
+                
+    paginator = Paginator(posts, 2)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
     return render(request, 'programacion.html', {'posts':posts})
 
 def tutoriales(request):
+    queryset = request.GET.get("buscar")
     posts = Post.objects.filter(
         estado = True,
-        categoria = Categoria.objects.get(nombre='Tutoriales')
+        categoria = Categoria.objects.get(nombre__iexact='Tutoriales')
     )
+    if queryset:
+        posts = Post.objects.filter(
+            Q(titulo__icontains = queryset) |
+            Q(descripcion__icontains = queryset),
+            estado = True,
+            categoria = Categoria.objects.get(nombre__iexact='Tutoriales')
+        ).distinct()
+                
+    paginator = Paginator(posts, 2)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
     return render(request, 'tutoriales.html', {'posts':posts})
 
 def tecnologia(request):
+    queryset = request.GET.get("buscar")
     posts = Post.objects.filter(
         estado = True,
-        categoria = Categoria.objects.get(nombre='Tecnologia')
+        categoria = Categoria.objects.get(nombre__iexact='Tecnologia')
     )
+    if queryset:
+        posts = Post.objects.filter(
+            Q(titulo__icontains = queryset) |
+            Q(descripcion__icontains = queryset),
+            estado = True,
+            categoria = Categoria.objects.get(nombre__iexact='Tecnologia')
+        ).distinct()
+                
+    paginator = Paginator(posts, 2)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
     return render(request, 'tecnologia.html', {'posts':posts})
 
 def videojuegos(request):
+    queryset = request.GET.get("buscar")
     posts = Post.objects.filter(
         estado = True,
-        categoria = Categoria.objects.get(nombre='Videojuegos')
+        categoria = Categoria.objects.get(nombre__iexact='Videojuegos')
     )
+    if queryset:
+        posts = Post.objects.filter(
+            Q(titulo__icontains = queryset) |
+            Q(descripcion__icontains = queryset),
+            estado = True,
+            categoria = Categoria.objects.get(nombre__iexact='Videojuegos')
+        ).distinct()
+                
+    paginator = Paginator(posts, 2)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
     return render(request, 'videojuegos.html', {'posts':posts})
